@@ -11,7 +11,8 @@ public class Wand : MonoBehaviour
 	private List<Gesture> trainingSet = new List<Gesture>();
     private int strokeNum = 0;
 
-    public GameObject particleSystem;
+    public GameObject particles;
+    private ParticleSystem.EmissionModule emission;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,8 @@ public class Wand : MonoBehaviour
 		foreach (TextAsset gestureXml in gesturesXml)
 			trainingSet.Add(GestureIO.ReadGestureFromXML(gestureXml.text));
 
-        particleSystem.GetComponent<ParticleSystem>().enableEmission = false;
+        emission = particles.GetComponent<ParticleSystem>().emission;
+        emission.enabled = false;
     }
 
     // Update is called once per frame
@@ -28,59 +30,39 @@ public class Wand : MonoBehaviour
     {
         Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
         Vector3 pos = r.GetPoint(10);
-        particleSystem.transform.position = pos;
+        particles.transform.position = pos;
 
         if (Input.GetMouseButtonDown(0)) {
             strokeNum++;
-            particleSystem.GetComponent<ParticleSystem>().enableEmission = true;
+            emission.enabled = true;
         }
         else if (Input.GetMouseButton(0)) {
 
             points.Add(new Point(Input.mousePosition.x, -Input.mousePosition.y, strokeNum));
         }
         else if (Input.GetMouseButtonUp(0)) {
-            particleSystem.GetComponent<ParticleSystem>().enableEmission = false;
+            emission.enabled = false;
         }
 
         if (Input.GetMouseButtonDown(1)) {
             Point[] _points = points.ToArray();
             Gesture candidate = new Gesture(_points);
             
-            Result gestureCLass = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
+            Result gestureClass = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
             
             Debug.Log(System.String.Join(", ", candidate.Points.Select(x => "(" + x.X + ", " + x.Y + ")")));
             Debug.Log(System.String.Join(", ", trainingSet.Select(x => x.Name)));
-            Debug.Log(gestureCLass.GestureClass + " " + gestureCLass.Score);
+            Debug.Log(gestureClass.GestureClass + " " + gestureClass.Score);
 
             strokeNum = 0;
             points.Clear();
+
+            if (gestureClass.GestureClass == "fire" && gestureClass.Score > .8) {
+                gameObject.GetComponent<Player>().SpawnFireball();
+            }
+            else if (gestureClass.GestureClass == "light" && gestureClass.Score > .8) {
+                gameObject.GetComponent<Player>().SpawnLight();
+            }
         }
-
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     clone = Instantiate(trailHolderPrefab, transform.position, Quaternion.identity) as GameObject;
-        //     clone.transform.SetParent(transform);
-        //     i++;
-        // }
-        // if (Input.GetMouseButton(0))
-        // {
-        //     points.Add(new Point(Input.mousePosition.x, Input.mousePosition.y, i));
-
-        //     Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //     Vector3 pos = r.GetPoint(_distance);
-        //     transform.position = pos;
-        // }
-        // if (Input.GetMouseButtonUp(0))
-        // {
-        //     if(i >= 3)
-        //     {
-        //         i = 0;
-        //         Point[] _points = points.ToArray();
-        //         Gesture candidate = new Gesture(_points);
-        //         string gestureCLass = PointCloudRecognizer.Classify(candidate, trainingSet);
-        //         spellname.text = gestureCLass;
-        //     }
-        //     clone.transform.parent = null;
-        // }
     }
 }
