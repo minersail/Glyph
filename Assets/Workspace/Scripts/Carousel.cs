@@ -12,18 +12,20 @@ public class Carousel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.Translate(offset, 0, 0);
-        X = offset;
+        // transform.Translate(offset, 0, 0);
+        // X = offset;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(-speed * Time.deltaTime, 0, 0);
-        X -= speed * Time.deltaTime;
-        if (X < -1) {
-            X *= -1;
-            transform.Translate(X * 2, 0, 0);
-        }
+        float x = ((offset + speed * Time.time) % 2) - 1;
+        transform.localPosition = new Vector3(x, 0, 0);
+        // transform.Translate(-speed * Time.deltaTime, 0, 0);
+        // X -= speed * Time.deltaTime;
+        // if (X < -1) {
+        //     X *= -1;
+        //     transform.Translate(X * 2, 0, 0);
+        // }
     }
 }

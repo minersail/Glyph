@@ -57,11 +57,8 @@ public class Wand : MonoBehaviour
             strokeNum = 0;
             points.Clear();
 
-            if (gestureClass.GestureClass == "fire" && gestureClass.Score > .8) {
-                gameObject.GetComponent<Player>().SpawnFireball();
-            }
-            else if (gestureClass.GestureClass == "light" && gestureClass.Score > .8) {
-                gameObject.GetComponent<Player>().SpawnLight();
+            if (gestureClass.Score > 0.8) {
+                gameObject.GetComponent<Player>().Spawn(gestureClass.GestureClass);
             }
         }
     }

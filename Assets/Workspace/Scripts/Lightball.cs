@@ -15,6 +15,10 @@ public class Lightball : Projectile
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) {                        
+            Launch();
+        }
+
         UpdateProjectile();
         
         float fadeaway = Mathf.Min(1, (1 - (timer / lifetime)) * 3);
