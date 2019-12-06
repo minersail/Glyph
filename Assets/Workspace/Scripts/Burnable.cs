@@ -5,7 +5,7 @@ using UnityEngine;
 public class Burnable : MonoBehaviour {
     public float burnTime = 2;
     public ParticleSystem ps;
-    public Light light;
+    public Light burnLight;
     Renderer _renderer;
 
     int shaderProperty;
@@ -20,8 +20,8 @@ public class Burnable : MonoBehaviour {
         var main = ps.main;
         main.duration = burnTime;
 
-        maxLight = light.intensity;
-        light.gameObject.SetActive(false);
+        maxLight = burnLight.intensity;
+        burnLight.gameObject.SetActive(false);
     }
 	
 	void Update ()
@@ -30,9 +30,9 @@ public class Burnable : MonoBehaviour {
             timer += Time.deltaTime;
         
             _renderer.material.SetFloat(shaderProperty, Mathf.InverseLerp(0, burnTime, timer));
-            light.intensity = (1 - Mathf.InverseLerp(0, burnTime, timer)) * maxLight;
+            burnLight.intensity = (1 - Mathf.InverseLerp(0, burnTime, timer)) * maxLight;
 
-            if (timer > burnTime) {
+            if (timer > burnTime + 2.0f) {
                 Destroy(gameObject);
             }
         }
@@ -41,6 +41,6 @@ public class Burnable : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         countdown = true;
         ps.Play();
-        light.gameObject.SetActive(true);
+        burnLight.gameObject.SetActive(true);
     }
 }

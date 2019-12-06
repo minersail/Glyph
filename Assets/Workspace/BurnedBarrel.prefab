@@ -290,7 +290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   burnTime: 2
   ps: {fileID: 2165413548089344040}
-  light: {fileID: 1065883543}
+  burnLight: {fileID: 1065883543}
 --- !u!136 &2538094340640908568
 CapsuleCollider:
   m_ObjectHideFlags: 0

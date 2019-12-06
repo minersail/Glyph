@@ -13,10 +13,7 @@ public class Shatterable : MonoBehaviour
         for (int i = 0; i < shatteredModel.transform.childCount; i++) {
             shatteredModel.transform.GetChild(i).gameObject.AddComponent<Rigidbody>().AddExplosionForce(10, shatteredModel.transform.GetChild(i).position, 10, 1, ForceMode.Impulse);
         }
-
-        // for (int i = 0; i < shatteredModel.transform.childCount; i++) {
-        //     shatteredModel.transform.GetChild(i).gameObject.AddComponent<Rigidbody>();
-        // }
+        
         gameObject.SetActive(false);        
     }
 }
