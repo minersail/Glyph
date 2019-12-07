@@ -10,7 +10,7 @@ public class Dim : MonoBehaviour
             GetComponent<Light>().intensity = 5f;
         }
         else if (Input.GetKeyDown(KeyCode.E)) {
-            GetComponent<Light>().intensity = 0.1f;
+            GetComponent<Light>().intensity = 0f;
         }
     }
 }

@@ -23,7 +23,7 @@ public class EarthOrb : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) {            
+        if (Input.GetAxis("Fire1") > 0 && Input.GetAxis("Fire2") > 0) {            
             growing = true;
         }
 

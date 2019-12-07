@@ -4769,7 +4769,7 @@ GameObject:
   - component: {fileID: 5310877796001200173}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4864,17 +4864,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   playerCam: {fileID: 5310877797468882308}
-  hand: {fileID: 5310877797515453602}
-  fireballPrefab: {fileID: 1947871717301538, guid: a990e3ac1318b834488c784d851f42a9,
-    type: 3}
-  lightPrefab: {fileID: 8774175894718390342, guid: bb83f7058293ad747bead5b9173bb024,
-    type: 3}
-  teleportPrefab: {fileID: 6835730908430251925, guid: 8df54b078ed5c6844ada1c1f4b1af6e9,
-    type: 3}
-  earthPrefab: {fileID: 7827519199448916881, guid: b03c6d8079e7b5047863b4c03ed12e32,
-    type: 3}
-  growthPrefab: {fileID: 7827519199448916881, guid: 32504fde8228e044d9054e7fe6423cdf,
-    type: 3}
 --- !u!114 &5310877796001200173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4888,6 +4877,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particles: {fileID: 1992961593}
+  offHand: {fileID: 5310877797515453602}
+  mainHand: {fileID: 0}
+  VRMode: 0
+  fireballPrefab: {fileID: 1947871717301538, guid: a990e3ac1318b834488c784d851f42a9,
+    type: 3}
+  lightPrefab: {fileID: 8774175894718390342, guid: bb83f7058293ad747bead5b9173bb024,
+    type: 3}
+  teleportPrefab: {fileID: 6835730908430251925, guid: 8df54b078ed5c6844ada1c1f4b1af6e9,
+    type: 3}
+  earthPrefab: {fileID: 7827519199448916881, guid: b03c6d8079e7b5047863b4c03ed12e32,
+    type: 3}
+  growthPrefab: {fileID: 7827519199448916881, guid: 32504fde8228e044d9054e7fe6423cdf,
+    type: 3}
 --- !u!1 &5310877797468882361
 GameObject:
   m_ObjectHideFlags: 0

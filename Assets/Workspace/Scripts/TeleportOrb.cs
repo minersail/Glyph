@@ -9,6 +9,8 @@ public class TeleportOrb : MonoBehaviour
     int shaderProperty;
     Renderer _renderer;
 
+    bool charging;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,36 +29,41 @@ public class TeleportOrb : MonoBehaviour
         float chargeIntensity = 0;
 
         foreach (GameObject pointObject in points) {
-            TeleportPoint point = pointObject.GetComponent<TeleportPoint>();
+            TeleportWaypoint point = pointObject.GetComponent<TeleportWaypoint>();
 
             float angle = Vector3.Angle(transform.forward, point.transform.position - transform.position);
 
             proximityIntensity = Mathf.Max((180 - angle) / 720, proximityIntensity);
 
             if (angle < 15) {
-                if (Input.GetKeyDown(KeyCode.Space)) {
-                    point.StartTeleport();
-                }
-                else if (Input.GetKeyUp(KeyCode.Space)) {
-                    point.InterruptTeleport();
-                }
-                else if (Input.GetKey(KeyCode.Space)) {
+                if (Input.GetAxis("Fire1") > 0 && Input.GetAxis("Fire2") > 0) {
+                    if (!charging) {
+                        point.StartTeleport();
+                        charging = true;
+                    }
+
                     point.ChannelTeleport();
 
-                    if (point.GetChannelProgress() > 0.8) {
+                    if (point.GetChannelProgress() > 0.8)
+                    {
                         Vector3 pointPos = point.transform.position;
-                        
-                        point.transform.position = transform.root.position;
-                        transform.root.position = pointPos;
+                        Transform player = GameObject.FindGameObjectWithTag("Player").transform;
+
+                        point.transform.position = player.position;
+                        player.position = pointPos;
 
                         Vector3 targetPoint = point.transform.position;
-                        targetPoint.y = transform.root.position.y;
-                        transform.root.LookAt(targetPoint, Vector3.up);
+                        targetPoint.y = player.position.y;
+                        player.LookAt(targetPoint, Vector3.up);
 
                         Destroy(gameObject);
                     }
 
                     chargeIntensity = (point.GetChannelProgress() / point.spawnEffectTime) * .75f;
+                }
+                else if (Input.GetAxis("Fire1") <= 0 && Input.GetAxis("Fire2") <= 0 && charging) {
+                    point.InterruptTeleport();
+                    charging = false;
                 }
             }
         }

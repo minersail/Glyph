@@ -11,7 +11,7 @@ public class GrowthOrb : Projectile
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) {            
+        if (Input.GetAxis("Fire1") > 0 && Input.GetAxis("Fire2") > 0) {            
             Launch();
         }
 
@@ -24,7 +24,7 @@ public class GrowthOrb : Projectile
                 RaycastHit hit;
                 Physics.Raycast(transform.position, Vector3.down, out hit);
 
-                Vector3 randomOffset = Random.insideUnitSphere * 2;
+                Vector3 randomOffset = Random.insideUnitSphere;
                 randomOffset.y = 0;
                 Instantiate(vegetationPrefabs[Random.Range(0, vegetationPrefabs.Length)], hit.point + randomOffset, Random.rotation);
 
