@@ -27,7 +27,7 @@ public class Wand : MonoBehaviour
     private bool drawing = false;
     private bool cast = false;
 
-    private Vector3 castNormal;
+    private float castAngle;
 
     // Start is called before the first frame update
     void Start()
@@ -56,9 +56,7 @@ public class Wand : MonoBehaviour
             if (!drawing) {
                 if (VRMode && strokeNum == 0) {
                     Vector3 direction = mainHand.position - transform.position;
-                    direction.y = 0;
-                    float angle = Mathf.Atan2(direction.z, direction.x);
-                    castNormal = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle));
+                    castAngle = Mathf.Atan2(direction.z, direction.x);
                 }
                 strokeNum++;
                 emission.enabled = true;
@@ -67,6 +65,11 @@ public class Wand : MonoBehaviour
             }
 
             if (VRMode) {
+                float flip = castAngle > 0 ? 1 : -1; // Flip if angle is less than zero
+
+                // We have the angle of the cast - now we can get the direction based on that angle
+                Vector3 castNormal = new Vector3(Mathf.Cos(castAngle), 0, Mathf.Sin(castAngle));
+
                 // Imagine you're in one of those mirror houses, surrounded by mirrors.
                 // Draw a line from your body, out through your arm, and whatever mirror it hits is the projection plane
                 // Wherever that line hits the mirror is the Vector3 "projected" variable
@@ -75,7 +78,7 @@ public class Wand : MonoBehaviour
                 // This is the X-distance from that point to the origin.
                 // The reason the origin is used is because ProjectOnPlane's plane runs through the origin.
                 float distanceXZ = Vector3.Distance(new Vector3(projected.x, transform.position.y, projected.z), Vector3.zero);
-                points.Add(new Point(distanceXZ, -projected.y, strokeNum));
+                points.Add(new Point(distanceXZ * flip, -projected.y, strokeNum));
             }
             else {
                 points.Add(new Point(Input.mousePosition.x, -Input.mousePosition.y, strokeNum));
@@ -89,12 +92,10 @@ public class Wand : MonoBehaviour
         if (Input.GetAxis("Cast") > 0 && !cast) {
             Point[] _points = points.ToArray();
             Gesture candidate = new Gesture(_points);
-            Debug.Log(_points.Count());
             
             Result gestureClass = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
             
             Debug.Log(System.String.Join(", ", candidate.Points.Select(x => "(" + x.X + ", " + x.Y + ")")));
-            Debug.Log(System.String.Join(", ", trainingSet.Select(x => x.Name)));
             Debug.Log(gestureClass.GestureClass + " " + gestureClass.Score);
 
             strokeNum = 0;
